@@ -1,0 +1,80 @@
+
+
+<div class="form-group mt-5 ml-5 mr-5">
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Listado de productos</h2>
+        </div>
+        <div class="col-sm-6">
+            <button class="btn btn-primary float-right" (click)="agregarProducto()"><bi name="folder-plus"></bi> Agregar producto</button>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-inline">
+          <!-- <ion-icon class="buscarIcon" name="search-outline"></ion-icon> -->
+          
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><bi name="search"></bi></span>
+            </div>
+            <input (input)="buscarPorNombre($event)" type="text" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="Buscar articulo">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover text-nowrap">
+            <thead>
+              <tr class="table-info">
+                <th scope="col">Actualizar</th>
+                <th scope="col">Código</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Cantidad</th>
+                <th class="th-sm-6" scope="col">Precio</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Ubicación</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Medida</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of productos; let posicion = index">
+                <tr *ngIf="item.ESTATUS">
+                  <td scope="row">
+                    <button (click)="actualizarProducto(item)" class="btn btn-danger">
+                      <bi class="iconoButton" name="cloud-arrow-up"></bi>
+                      <span class="labelButton">Actualizar</span> 
+                    </button></td>
+                  <td>
+                      <h5>
+                          <a class="text-danger" (click)="pasarParametro(item)" tooltip="Más información de {{item.PRODUCTO}}">{{item.CODIGO}}</a>
+                      </h5>
+                  </td>
+                  <td>{{item.PRODUCTO}}</td>
+                  <td>
+                    <input tooltip="No puede ser menor a 1" (input)="updateItemCantidad(posicion, $event)" class="form-control" type="number" [value]="item.CANTIDAD">
+                  </td>
+                  <td>
+                      <div class="form-inline" style="width: 100px;">
+                          <label [for]="item.IDDB" class="col-form-label">$ </label>
+                          <input tooltip="No puede ser menor a 0.1" (input)="updateItemPrecio(posicion, $event)" [id]="item.IDDB" class="form-control col-sm-10" type="number" [value]="item.PRECIO">                 
+                      </div>
+                  </td>
+                  <td>{{item.DESCRIPCION}}</td>
+                  <td>
+                    <div class="form-inline">
+                        <select [id]="item.IDDB" class="form-control"  (change)="cambiarLocal(posicion, $event)">
+                          <option [selected]="item.UBICACION == local.ID" *ngFor="let local of locales" [value]="local.ID">{{local.NOMBRE}}</option>
+                        </select>
+                    </div>
+                  </td>
+                  <td>{{item.MARCA}}</td>
+                  <td>{{item.MEDIDA}}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+    </div>
+</div>
+

@@ -1,0 +1,176 @@
+<div class="container-fluid">
+  <div class="row">
+    <div *ngIf="!seccionPago" class="col-10">
+        <div class="form-group">
+            <h4 >Productos y Servicios</h4>
+            <tabset [justified]="true">
+              <tab class="bag-check-fill" heading="Productos">
+                <div class="form-group mt-3">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><bi name="search"></bi></span>
+                        </div>
+                        <input (input)="buscarPorNombre($event)" type="text" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="Buscar articulo">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                          <tr class="table-info">
+                            <th scope="col">Agregar</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Cantidad</th>
+                            <th class="th-sm-6" scope="col">Precio</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Ubicación</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Medida</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngFor="let item of productos; let posicion = index">
+                            <tr *ngIf="item.ESTATUS">
+                              <td>
+                                <a (click)="anadirProductoALista(posicion)"class="btn btn-success float-left btn-pagar">
+                                  <bi class="iconCar" name="cart-plus"></bi>
+                                </a>
+                              </td>
+                              <td>
+                                  <h5>
+                                      <p class="text-danger">{{item.CODIGO}}</p>
+                                  </h5>
+                              </td>
+                              <td>{{item.PRODUCTO}}</td>
+                              <td>{{item.CANTIDAD}}</td>
+                              <td>{{item.PRECIO | currency}}</td>
+                              <td tooltip="{{item.DESCRIPCION}}">{{recortarCadena(item.DESCRIPCION, 20)}}</td>
+                              <td>
+                                <ng-container *ngFor="let local of locales">
+                                    <p *ngIf="item.UBICACION == local.ID" class="col-sm-6">{{primeraLetraMayuscula(local.NOMBRE)}}</p>
+                                </ng-container>
+                              </td>
+                              <td>{{primeraLetraMayuscula(item.MARCA)}}</td>
+                              <td>{{item.MEDIDA}}</td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                </div>
+            </tab>
+              <tab heading="Servicios">
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <h3>Servicios</h3>
+                        <form class="container" [formGroup]="formServicio">
+                            <div class="form-group">
+                              <label for="servicio">Nombre del servicio</label>
+                              <input type="text" class="form-control" placeholder="Nombre del servicio" formControlName="NOMBRE"> 
+                            </div>
+                            <div class="alert alert-danger" role="alert" *ngIf="formServicio.controls['NOMBRE'].dirty && formServicio.controls['NOMBRE'].invalid">
+                              <div *ngIf="formServicio.controls['NOMBRE'].errors !== null && formServicio.controls['NOMBRE'].errors.required">
+                                  El nombre del servicio es requerido.
+                              </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="servicio">Precio</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="0.00" formControlName="PRECIO">
+                                </div>
+                                <div class="alert alert-danger" role="alert" *ngIf="formServicio.controls['PRECIO'].dirty && formServicio.controls['PRECIO'].invalid">
+                                  <div *ngIf="formServicio.controls['PRECIO'].errors !== null && formServicio.controls['PRECIO'].errors.required">
+                                      La cantidad es requerida
+                                  </div>
+                                  <div *ngIf="formServicio.controls['PRECIO'].errors !== null && formServicio.controls['PRECIO'].errors.min">
+                                      El minimo es de 1
+                                  </div>
+                                </div>
+                            </div>
+                            <button [disabled]="!formServicio.valid" class="btn btn-primary" (click)="anadirServicioALista()">Agregar servicio</button>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="flex-md-equal w-100 my-md-3 pl-md-3">
+                            <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+                              <div class="bg-dark box-shadow mx-auto" style="width: 80%; height: 380px; border-radius: 21px 21px 0 0;">
+                                <img src="./assets/Logo/Logo.jpeg" class="card-img-top imagen mt-3" alt="...">
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+              </tab>
+                
+                
+            </tabset>
+            
+            
+
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="d-flex align-items-center justify-content-center">
+            <div class="row">
+                <bi name="cart4" class="iconCar"></bi>
+                <h5>Carrito</h5>
+            </div>
+            
+        </div>
+        <div class="d-flex align-items-center justify-content-center">
+            <h5>Total:</h5>
+            <h5 class="col-auto">{{totalPagar | currency}}</h5>
+        </div>
+        <div class="d-flex align-items-center justify-content-center">
+            <a *ngIf="!seccionPago" routerLink="/venta/resumen" class="btn btn-success btn-pagar" (click)="seccionPagar()">Pagar</a>
+            <a *ngIf="seccionPago" routerLink="/venta" class="btn btn-danger btn-pagar" (click)="seccionPagar()">Regresar</a>
+        </div>
+        <div class="mt-3">
+            <div *ngFor="let pr of carProductos; let posicionProducto = index" class="card mb-4 border-info" >
+                <div class="card-titulo">
+                  {{pr.PRODUCTO.PRODUCTO}}
+                </div>
+                <div class="row no-gutters">
+                  <div class="col-md-5 mt-1 ml-1">
+                    <img [src]="pr.PRODUCTO.IMGURL" class="rounded card-img carImagen img-fluid" alt="">
+                  </div>
+                  <div class="col-auto">
+                    <div class="ml-1">
+                      <h5 class="card-title">{{pr.PRODUCTO.CODIGO}}</h5>
+                      <label class="card-text"> <small class="text-muted">{{pr.PRODUCTO.PRECIO | currency}} x {{pr.CANTIDADITEMS}}</small></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row no-gutters">
+                  <div class="col-sm-6 col-md-8">
+                    <a (click)="deleteItemProductoLista(posicionProducto)" class="ml-1 mb-1 mt-1 btn btn-outline-primary col-auto">Eliminar</a>
+                  </div>
+                  <div class="col-6 col-md-4">
+                    <div class="row">
+                      <div class="col-auto">
+                        <a (click)="addItemProduct(posicionProducto)"><bi class="iconItem text-primary" name="plus-circle"></bi></a>
+                      </div>
+                      <div class="col-auto">
+                        <a (click)="subItemProduct(posicionProducto)"><bi class="iconItem text-primary" name="dash-circle"></bi></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <ng-container *ngFor="let servCar of carServicios; let posicionServicio = index">
+              <div class="card border-info mb-3" style="max-width: 18rem;">
+                <div class="card-titulo" tooltip="{{servCar.NOMBRE}}">{{recortarCadena(servCar.NOMBRE, 15)}}</div>
+                <div class="ml-1 text-info">
+                  <h5 class="card-title">{{servCar.PRECIO | currency}}</h5>
+                </div>
+                <a (click)="deleteItemServicioLista(posicionServicio)" class="col-auto mr-1 mb-1 ml-1 btn btn-outline-primary btn-sm">Eliminar</a>
+                
+              </div>
+            </ng-container>
+        </div>
+    </div>
+    <app-resumen *ngIf="seccionPago" class="col-10" [productos]="productos" [carProductos]="carProductos" [carServicios]="carServicios" [totalPagar]="totalPagar"></app-resumen>
+  </div>
+</div>

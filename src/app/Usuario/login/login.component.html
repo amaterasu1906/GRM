@@ -1,0 +1,35 @@
+<div class="contenido-login">
+    <div class="login-form">
+        <form  method="post" [formGroup]="fUsuario">
+            <div class="avatar">
+                <img src="https://cdn0.iconfinder.com/data/icons/cybersecurity-glyph-silhouettes/300/22148727Untitled-3-512.png" alt="Avatar">
+            </div>
+            <h2 class="text-center">Iniciar Sesion</h2>   
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Usuario" formControlName="usuario">
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="fUsuario.controls['usuario'].dirty && fUsuario.controls['usuario'].invalid">
+                <div *ngIf="fUsuario.controls['usuario'].errors !== null && fUsuario.controls['usuario'].errors.required">
+                    El usuario es requerido
+                </div>
+                <div *ngIf="fUsuario.controls['usuario'].errors !== null && fUsuario.controls['usuario'].errors.email">
+                    Usuario invalido
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="password" (keyUp.enter)="login()" class="form-control" placeholder="Password" formControlName="contrasena">
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="fUsuario.controls['contrasena'].dirty && fUsuario.controls['contrasena'].invalid">
+                <div *ngIf="fUsuario.controls['contrasena'].errors !== null && fUsuario.controls['contrasena'].errors.required">La contraseña es requerida</div>
+            </div>        
+            <div class="form-group">
+                <button class="btn btn-primary btn-lg btn-block"
+                 [disabled]="!fUsuario.valid" (click)="login()"
+                >Login</button>
+            </div>
+        </form>
+        <div *ngIf="!datosCorrectos" class="alert alert-warning" role="alert">
+            {{textoError}}
+        </div>
+    </div>
+</div>

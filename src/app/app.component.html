@@ -1,0 +1,8 @@
+<div *ngIf="usuario!=null && !load; else showLogin">
+  <app-header></app-header>
+  <router-outlet></router-outlet>
+</div>
+<div *ngIf="load" class="loader">Loading...</div>
+<ng-template #showLogin>
+  <app-login *ngIf="!load"></app-login>
+</ng-template>

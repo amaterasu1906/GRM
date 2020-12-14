@@ -1,0 +1,43 @@
+margenes{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.contorno{
+    border-left: rgba(128, 128, 128, 0.37) 3px solid;
+    position: relative;
+    height: 90vh;
+    border-right: white 15px solid;
+}
+.iconCar{
+    font-size: 24px;
+    margin-top: -10px;
+}
+.total{
+    margin-right: 10px;
+}
+.btn-pagar{
+    width: 100%;
+}
+
+.carImagen{
+    width: 100%;
+    height: 64px;
+}
+.carItem{
+    height: 32px;
+    width: 32px;
+}
+.iconItem{
+    font-size: 24px;
+    margin-top: 0px;
+    position: relative;
+    margin-left: -10px;
+}
+
+.card-titulo {
+    padding: 0.1rem 1.25rem;
+    margin-bottom: 0px;
+    background-color: rgb(190 229 235);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}

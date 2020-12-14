@@ -1,0 +1,65 @@
+<div class="container col">
+    <div class="row ">
+        <div class="w-100 position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+            <div class=" mx-auto">
+              <h1 class="display-4 font-weight-normal">Resumen de la compra</h1>
+              <div class="row">
+                  <div class="col-6">
+                      <h3>
+                          Total: {{totalPagar | currency}}
+                      </h3>
+                  </div>
+                  <div class="col-6">
+                    <a (click)="pagar()" class="btn btn-outline-success">Finalizar la compra</a>
+                </div>
+              </div>
+            </div>
+            <div class="product-device box-shadow d-none d-md-block"></div>
+            <div class="product-device product-device-2 box-shadow d-none d-md-block"></div>
+          </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <h4>Productos</h4>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">Piezas</th>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Precio</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let producto of carProductos">
+                        <th scope="row">{{producto.CANTIDADITEMS}}</th>
+                        <td>{{producto.PRODUCTO.PRODUCTO}}</td>
+                        <td>{{producto.PRODUCTO.PRECIO | currency}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+        <div class="col-4">
+            <h4>Servicios</h4>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Servicio</th>
+                        <th scope="col">Precio</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let serv of carServicios; let pos = index">
+                        <th scope="row">{{pos+1}}</th>
+                        <td>{{serv.NOMBRE}}</td>
+                        <td>{{serv.PRECIO | currency}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+</div>
