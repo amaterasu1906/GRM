@@ -18,6 +18,8 @@ export class HomeComponent implements OnInit {
       
     })
     console.log("Google");
+    console.log("Añadimos nuevos mensajes");
+    
     
   }
   ngOnInit(): void {
