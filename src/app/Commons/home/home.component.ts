@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
       console.log(items);
       
     })
+    console.log("Google");
     
   }
   ngOnInit(): void {
