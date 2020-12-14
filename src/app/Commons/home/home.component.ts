@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
       console.log(items);
       
     })
+    console.log("Añadimos nuevos mensajes");
+    
     
   }
   ngOnInit(): void {
