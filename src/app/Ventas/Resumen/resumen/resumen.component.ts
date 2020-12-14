@@ -32,10 +32,9 @@ export class ResumenComponent implements OnInit {
   dbItemsProductos : Producto[] = new Array<Producto>();
 
   updateData : Array<updateProduct> = [];
-  // numeroActualizado : number = 0;
   
   constructor(private db: AngularFirestore, private getItems : GetItemsService, private modal : SweetalertService) { 
-    // this.pagar();
+
   }
 
   ngOnInit(): void {
@@ -83,7 +82,6 @@ export class ResumenComponent implements OnInit {
       this.carProductos.length = 0;
   }
   updateProductos(){
-    // this.numeroActualizado++;
     this.carProductos.forEach((item) => {
       let productoUp = item.PRODUCTO;
       productoUp.CANTIDAD = productoUp.CANTIDAD - item.CANTIDADITEMS;
