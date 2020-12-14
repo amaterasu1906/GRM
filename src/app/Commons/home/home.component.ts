@@ -17,8 +17,6 @@ export class HomeComponent implements OnInit {
       console.log(items);
       
     })
-    console.log("Google");
-    console.log("Añadimos nuevos mensajes");
     
     
   }
