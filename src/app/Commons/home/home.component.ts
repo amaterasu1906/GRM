@@ -12,12 +12,11 @@ export class HomeComponent implements OnInit {
   
   constructor(private getItemsDB: AngularFirestore) {
     console.log("Inicio");
-    var alovelaceDocumentRef = this.getItemsDB.collection('Productos').doc('MARCA').collection('CatMarca').doc('NOMBRE').valueChanges().subscribe((x) => {
-      console.log(x);
-      
-    });
-    console.log(alovelaceDocumentRef);
     
+    this.getItemsDB.collection("Productos").valueChanges().subscribe((items) => {
+      console.log(items);
+      
+    })
     
   }
   ngOnInit(): void {
