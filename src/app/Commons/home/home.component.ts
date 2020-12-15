@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Producto } from 'src/app/Models/producto';
+import { switchMap } from 'rxjs/operators'
+import { registerLocaleData } from '@angular/common';
+import { Categoria } from 'src/app/Models/catcategoria';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
@@ -9,22 +13,32 @@ import { Producto } from 'src/app/Models/producto';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  
+  marcas$! : Observable<Categoria[]>;
+  endDate$! : BehaviorSubject<Date>;
   constructor(private getItemsDB: AngularFirestore) {
     console.log("Inicio");
     
-    this.getItemsDB.collection("Productos").valueChanges().subscribe((items) => {
-      console.log(items);
-      
-    })
-    console.log("Google");
-    console.log("Añadimos nuevos mensajes");
+    this.endDate$ = new BehaviorSubject(new Date('2020-12-08'));
+    this.marcas$ = this.endDate$.pipe(
+      switchMap( date => this.getItemsDB.collection<Categoria>('CatMarca', ref =>
+        ref.where('FECHAALTA', '>=', date)
+      ).valueChanges())
+    );
     
     
   }
   ngOnInit(): void {
     
     
+  }
+
+  nextFecha(){
+    
+    this.endDate$.next(moment(this.endDate$.getValue()).add(7, 'days').toDate())
+  }
+  previousFecha(){
+    this.endDate$.next(moment(this.endDate$.getValue()).add(-7, 'days').toDate())
+
   }
 
 

@@ -1,3 +1,6 @@
-<p>home works!</p>
+<div class="container">
+    <p *ngFor="let marca of marcas$ | async"> {{marca.NOMBRE}}</p>
+</div>
 
-<button (click)="addProducto()" class="btn btn-primary">Agregar</button>
+<button (click)="nextFecha()" class="btn btn-primary">Next</button>
+<button (click)="previousFecha()" class="btn btn-primary">Previous</button>
