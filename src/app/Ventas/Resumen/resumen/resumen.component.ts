@@ -55,34 +55,26 @@ export class ResumenComponent implements OnInit {
     let subs$ = this.getItems.valueChangeProductos().subscribe((items) => {
       this.dbItemsProductos = items;
       console.log(this.dbItemsProductos);
-      
-      if(this.validarDisponibilidad()){
-        if(this.validarPrecios()){
-          // if(this.numeroActualizado < 1){
-            if(this.carProductos.length == 0){
-              this.addServicio();
-            }else{
-              this.updateProductos()
-            }
-            // if(){
-            //   this.modal.modalSuccess("Actualizar","Se actualizo");
-
-            // }else{
-            //   this.modal.modalError("Actualizar","Error al actualizar los productos");
-            // }
-          // }
+      if(this.carProductos.length != 0){
+        if(this.validarDisponibilidad()){
+          if(this.validarPrecios()){
+            this.updateProductos();
+          }else{
+            this.modal.modalError("Validar disponibilidad","Algun producto ha cambiado de precio");
+          }
         }else{
-          this.modal.modalError("Validar disponibilidad","Algun producto ha cambiado de precio");
+          this.modal.modalError("Validar disponibilidad","Algun producto se ha agotado o hay menor cantidad disponible a la requerida");
         }
+      }else if(this.carServicios.length != 0){
+        this.addServicio();
       }else{
-        this.modal.modalError("Validar disponibilidad","Algun producto se ha agotado o hay menor cantidad disponible a la requerida");
+        this.modal.modalError("Carrito vacio","No hay productos o servicios");
       }
       subs$.unsubscribe();
     });
   }
   
   addVenta(){
-    console.log("Entrando a la venta");
     // Idventa = 20201214+time
     let venta = new Venta();
     venta.IDVENTA = '1234';
@@ -95,17 +87,14 @@ export class ResumenComponent implements OnInit {
       let x = this.convertProductoToVentaProduct(item);
       ventProd.push(x);
     });
-    // let ventServ : Array<any> = new Array<any>();
     this.carServicios.forEach((item) => {
       let x = this.convertServicioToVentaProduct(item);
       ventProd.push(x);
     });
-    console.log(JSON.stringify(ventProd));
     venta.PRODUCTOSVENDIDOS = JSON.stringify(ventProd);
     this.db.collection('Ventas').add({...venta}).then((response) => {
-      console.log("Insertado correctamente");
       this.modal.modalSuccess("Venta","Se añadio correctamente la venta");
-      
+      this.finishUpdateProductos();
     }).catch(error =>{
       this.modal.modalError("Venta","Error al vender");
       // Error al insertar, se anade al localstorage
@@ -129,15 +118,9 @@ export class ResumenComponent implements OnInit {
     return vp;
   }
   addServicio(){
-    console.log("AddServicio");
     try{
       this.carServicios.forEach((itemProducto, index) => {
-        console.log("Añadiendo el servicio a DB");
-        // this.db.collection('Servicio').doc().set({...itemProducto}).then((response) => {
         this.db.collection('Servicio').add({...itemProducto}).then((response) => {
-          console.log("Insertado correctamente");
-          console.log(response);
-          
           itemProducto.ID = response.id;
           if((index+1) == this.carServicios.length){
             // si la insercion es correcta de servicios se obtienen los ID y se insertan en las ventas
@@ -147,23 +130,19 @@ export class ResumenComponent implements OnInit {
           // Error al insertar, se anade al localstorage
           console.log("Error al insertar servicio: " + error);
         });
-        console.log("Insertado servicio:");
-        console.log(this.carServicios);
       });
     }catch(error){
       console.log(error);
-      
     }
-    
   }
   reversoVenta(){
     console.log("Aun nada");
     
   }
   finishUpdateProductos(){
-      this.reversoVenta();
       localStorage.removeItem("carrito");
       this.carProductos.length = 0;
+      this.carServicios.length = 0;
   }
   updateProductos(){
     this.carProductos.forEach((item, index) => {      
@@ -176,16 +155,13 @@ export class ResumenComponent implements OnInit {
           IDDB : item.PRODUCTO.IDDB,
           UPDATE: true
         });        
-        if( this.itemsUpdate == this.carProductos.length ){
-          this.updateExitoso = true;
-        }
+        if( this.itemsUpdate == this.carProductos.length ){ this.updateExitoso = true; }
         if((index+1) == this.carProductos.length){
           if(this.updateExitoso){
             // si fue exitosa la actualizacion de productos, continuamos con la insercion de datos
-            this.addServicio();
-          }else{
-            // Realizar reverso
-            this.reversoVenta();
+            if(this.carServicios.length == 0){ this.addVenta();}
+            else{ this.addServicio(); }
+          }else{this.reversoVenta();
           }
         } 
       }).catch(error =>{
@@ -194,14 +170,6 @@ export class ResumenComponent implements OnInit {
           UPDATE: false});
       });
           
-    });
-  }
-
-  actualizarProducto(item: Producto){
-    this.db.doc('Productos/'+item.IDDB).update(item).then((result) => {
-      this.modal.modalSuccess('Actualizar producto','Producto actualizado correctamente');  
-    }).catch(error =>{
-      this.modal.modalError('Actualizar producto','Error al actualizar');
     });
   }
 
