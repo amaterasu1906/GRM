@@ -15,11 +15,27 @@ export class SweetalertService {
       confirmButtonText: 'Aceptar'
     })
   }
+  modalSuccessHtml(titulo:string, mensaje:string){
+    Swal.fire({
+      title: titulo,
+      html: mensaje,
+      icon: 'success',
+      confirmButtonText: 'Aceptar'
+    })
+  }
 
   modalError(titulo:string, mensaje: string){
     Swal.fire({
       title: titulo,
       text: mensaje,
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
+    })
+  }
+  modalErrorHtml(titulo:string, mensaje: string){
+    Swal.fire({
+      title: titulo,
+      html: mensaje,
       icon: 'error',
       confirmButtonText: 'Aceptar'
     })

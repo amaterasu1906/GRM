@@ -27,7 +27,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BootstrapIconsModule } from 'ng-bootstrap-icons';
 import { allIcons } from 'ng-bootstrap-icons/icons';
 import { ResumenComponent } from './Ventas/Resumen/resumen/resumen.component';
-
+import { ExcelComponent } from './Productos/Data/excel/excel.component';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ResumenComponent } from './Ventas/Resumen/resumen/resumen.component';
     VenderComponent,
     MostrarProductosComponent,
     HomeComponent,
-    ResumenComponent
+    ResumenComponent,
+    ExcelComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +55,8 @@ import { ResumenComponent } from './Ventas/Resumen/resumen/resumen.component';
     AngularFireStorageModule,
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
-    BootstrapIconsModule.pick(allIcons)
+    BootstrapIconsModule.pick(allIcons),
+    CarouselModule.forRoot()
   ],
   providers: [
     AngularFireAuth,

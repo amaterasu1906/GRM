@@ -55,7 +55,7 @@ export class ListaComponent implements OnInit {
 
   updateItemCantidad(posicion: number, evento : any){
     let cantidadUpdate = evento.srcElement.value;
-    if(cantidadUpdate > 1){
+    if(cantidadUpdate >= 1){
       this.productos[posicion].CANTIDAD = cantidadUpdate;
     }
   }
@@ -69,6 +69,9 @@ export class ListaComponent implements OnInit {
 
   agregarProducto(){
     this.ruta.navigateByUrl('/productos/agregar');
+  }
+  cargarExcel(){
+    this.ruta.navigateByUrl('/read-excel');
   }
 
   cambiarLocal(posicion: number, event : any){
