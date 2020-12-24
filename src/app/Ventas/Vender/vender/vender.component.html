@@ -31,8 +31,8 @@
                         <tbody>
                           <ng-container *ngFor="let item of productos; let posicion = index">
                             <tr *ngIf="item.ESTATUS">
-                              <td>
-                                <a (click)="anadirProductoALista(posicion)"class="btn btn-success float-left btn-pagar">
+                              <td [ngClass]="{disabled : item.CANTIDAD == 0}">
+                                <a (click)="anadirProductoALista(posicion)" [ngClass]="{disabled : item.CANTIDAD == 0}" class="btn btn-success float-left btn-pagar">
                                   <bi class="iconCar" name="cart-plus"></bi>
                                 </a>
                               </td>

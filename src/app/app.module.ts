@@ -29,6 +29,7 @@ import { allIcons } from 'ng-bootstrap-icons/icons';
 import { ResumenComponent } from './Ventas/Resumen/resumen/resumen.component';
 import { ExcelComponent } from './Productos/Data/excel/excel.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
     BootstrapIconsModule.pick(allIcons),
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   providers: [
     AngularFireAuth,

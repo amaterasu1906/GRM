@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { ToastrService } from 'ngx-toastr';
 import { Producto } from 'src/app/Models/producto';
 import { GetItemsService } from 'src/app/Services/database/get-items.service';
 import { SweetalertService } from 'src/app/Services/Modales/sweetalert.service';
@@ -23,7 +25,8 @@ export class ExcelComponent implements OnInit {
   productosConflict : Producto[] = new Array<Producto>();
   productos : Producto[] = new Array<Producto>();
 
-  constructor(private modal : SweetalertService, private getItems : GetItemsService) { 
+  constructor(private modal : SweetalertService, private getItems : GetItemsService, private db: AngularFirestore,
+    private toastr: ToastrService) { 
     this.productos = this.getItems.getProductos();
   }
 
@@ -31,8 +34,12 @@ export class ExcelComponent implements OnInit {
   }
 
   incomingfile(event:any) {
-    this.file= event.target.files[0];
-    this.Upload();
+    if(event.target.files.length > 0){
+      this.file= event.target.files[0];
+      this.Upload();
+    }else{
+      this.modal.modalErrorFile('Sin archivos','Debe seleccionar un archivo')
+    }
   }
   
   Upload() {
@@ -49,6 +56,8 @@ export class ExcelComponent implements OnInit {
       var worksheet = workbook.Sheets[first_sheet_name];
       let dataRaw = XLSX.utils.sheet_to_json(worksheet,{raw:true});
       if(this.validarCampos(dataRaw)){
+        console.log(dataRaw);
+        
         this.dataExist = true;
         this.loadData(dataRaw);
       }else{
@@ -73,7 +82,10 @@ export class ExcelComponent implements OnInit {
         let nameProduct = product.PRODUCTO.toLowerCase();
         let nameDato = dato.PRODUCTO.toLowerCase();
         if(codigoProduct == codigoDato && nameProduct == nameDato){
-          this.productosUpdate.push(dato);
+          product.DATA1 = dato.CANTIDAD;
+          product.DATA2 = dato.PRECIO;
+          product.IMGURL = dato.IMGURL != undefined ? dato.IMGURL : "";
+          this.productosUpdate.push(product);
           usado = true;
         }
         if(codigoProduct == codigoDato && nameProduct != nameDato){
@@ -111,4 +123,48 @@ export class ExcelComponent implements OnInit {
     return valido;
   }
 
+  updateProductos(){
+    const clone = [...this.productosUpdate];
+    clone.forEach((item, index) => {
+      item.FECHAACTUALIZACION = new Date().toISOString();
+      item.CANTIDAD = parseInt(item.CANTIDAD.toString()) + item.DATA1;
+      item.PRECIO = item.DATA2;
+      this.db.doc('Productos/'+item.IDDB).update(item).then((result) => {
+        this.borrarElemento(item.ID, this.productosUpdate);
+        this.toastr.success('Actualizado', item.IDDB);
+      }).catch(error =>{
+        this.toastr.error('Error al actualizar', item.IDDB);
+        console.log("Error al actualizar: " + item.IDDB);
+      });
+
+    });
+  }
+  addProductos(){
+    let clone = this.productosNuevos;
+    clone.forEach((producto, index) => {
+      producto.ESTATUS = true;
+      producto.IMGURL = producto.IMGURL != undefined ? producto.IMGURL : "";
+      producto.FECHAALTA = new Date().toISOString();
+      producto.FECHAACTUALIZACION = new Date().toISOString();
+      this.db.collection('Productos').add(producto).then((response) => {
+        this.borrarElemento(producto.ID, this.productosNuevos);
+        this.toastr.success('Agregado', response.id);
+      }).catch(error =>{
+        this.toastr.error('Agregado', "No se pudo añadir correctamente");
+        console.log("Error al actualizar: " + producto.PRODUCTO);
+      });
+
+    });
+  }
+
+  borrarElemento(id:string, coleccion : Producto[]){
+    coleccion.forEach((item, index) => {
+      console.log(index);
+      if(item.ID == id){
+        coleccion.splice(index, 1);
+        console.log("Encontrado ");
+        return;
+      }
+    });
+  }
 }

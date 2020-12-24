@@ -6,11 +6,11 @@
         <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
     </div>
     <div *ngIf="dataExist">
-        <div class="row">
+        <div class="row" *ngIf="productosNuevos.length != 0">
             <div class="form-group w-100">
                 <div class="row form-group">
                     <h3 class="col">Productos Nuevos</h3>
-                    <button class="col-2 btn btn-danger">Agregar productos</button>
+                    <button class="col-2 btn btn-danger" (click)="addProductos()" [disabled]="productosNuevos.length == 0">Agregar productos</button>
                 </div>
                 <carousel *ngIf="productosNuevos.length > 0"  [showIndicators]="false"
                             [itemsPerSlide]= "itemsPerSlide"
@@ -31,11 +31,11 @@
                 </carousel>
             </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="productosUpdate.length != 0">
             <div class="form-group w-100">
                 <div class="row form-group">
                     <h3 class="col">Productos Actualizables</h3>
-                    <button class="col-2 btn btn-danger">Actualizar productos</button>
+                    <button class="col-2 btn btn-danger" (click)="updateProductos()" [disabled]="productosUpdate.length == 0">Actualizar productos</button>
                 </div>
                 <carousel *ngIf="productosUpdate.length > 0"  [showIndicators]="false"
                             [itemsPerSlide]= "itemsPerSlide"
@@ -48,8 +48,8 @@
                             <div class="card-header">{{producto2.PRODUCTO}}</div>
                             <div class="card-body text-primary">
                                 <h5 class="card-title">{{producto2.DESCRIPCION}}</h5>
-                                <p>Cantidad: <small class="text-muted">{{producto2.CANTIDAD}}</small></p>
-                                <p>{{producto2.PRECIO | currency}}</p>
+                                <p>Cantidad: {{producto2.CANTIDAD}} <small class="text-muted">+{{producto2.DATA1}}</small></p>
+                                <p>{{producto2.PRECIO | currency}} -> {{producto2.DATA2 | currency}}</p>
                             </div>
                         </div>
                     </slide>
@@ -57,7 +57,7 @@
             </div>
             
         </div>
-        <div class="row">
+        <div class="row" *ngIf="productosConflict.length != 0">
             <div class="form-group w-100">
                 <div class="row form-group">
                     <h3 class="col">Productos con error o repetidos[Código o Nombre]</h3>

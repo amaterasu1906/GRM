@@ -19,7 +19,7 @@ interface productosLista {
   styleUrls: ['./vender.component.scss']
 })
 export class VenderComponent implements OnInit {
-  seccionPago :  boolean = true;
+  seccionPago :  boolean = false;
 
   productos : Producto[] = new Array<Producto>();
   marcas : Categoria[] = new Array<Categoria>();
@@ -110,6 +110,9 @@ export class VenderComponent implements OnInit {
   buscarPorNombre(evento: any){
     let nombre = evento.srcElement.value.toString().toLowerCase();
     this.productos.forEach((item) => {
+      if( item.MEDIDA == undefined){
+        item.MEDIDA = "";
+      }
       if(item.PRODUCTO.toLowerCase().includes(nombre) ||
         item.DESCRIPCION.toLowerCase().includes(nombre) ||
         item.MEDIDA.toLowerCase().includes(nombre) ||
