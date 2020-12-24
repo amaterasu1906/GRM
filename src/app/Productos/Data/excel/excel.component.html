@@ -1,0 +1,85 @@
+<div class="container">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+          <h1 class="display-4 font-weight-normal">Cargar excel</h1>
+          <input class="btn btn-outline-secondary" type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
+        <div class="product-device shadow-sm d-none d-md-block"></div>
+        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+    </div>
+    <div *ngIf="dataExist">
+        <div class="row" *ngIf="productosNuevos.length != 0">
+            <div class="form-group w-100">
+                <div class="row form-group">
+                    <h3 class="col">Productos Nuevos</h3>
+                    <button class="col-2 btn btn-danger" (click)="addProductos()" [disabled]="productosNuevos.length == 0">Agregar productos</button>
+                </div>
+                <carousel *ngIf="productosNuevos.length > 0"  [showIndicators]="false"
+                            [itemsPerSlide]= "itemsPerSlide"
+                            [singleSlideOffset]="singleSlideOffset"
+                            [interval]="0"
+                            [noWrap]="noWrap"
+                            >
+                    <slide *ngFor="let producto1 of productosNuevos; let index = index" class="ml-1 item">
+                        <div class="card border-success mb-3" style="max-width: 18rem;">
+                            <div class="card-header">{{producto1.PRODUCTO}}</div>
+                            <div class="card-body text-success">
+                                <h5 class="card-title">{{producto1.DESCRIPCION}}</h5>
+                                <p>Cantidad: <small class="text-muted">{{producto1.CANTIDAD}}</small></p>
+                                <p>{{producto1.PRECIO | currency}}</p>
+                            </div>
+                        </div>
+                    </slide>
+                </carousel>
+            </div>
+        </div>
+        <div class="row" *ngIf="productosUpdate.length != 0">
+            <div class="form-group w-100">
+                <div class="row form-group">
+                    <h3 class="col">Productos Actualizables</h3>
+                    <button class="col-2 btn btn-danger" (click)="updateProductos()" [disabled]="productosUpdate.length == 0">Actualizar productos</button>
+                </div>
+                <carousel *ngIf="productosUpdate.length > 0"  [showIndicators]="false"
+                            [itemsPerSlide]= "itemsPerSlide"
+                            [singleSlideOffset]="singleSlideOffset"
+                            [interval]="0"
+                            [startFromIndex]="0"
+                            >
+                    <slide *ngFor="let producto2 of productosUpdate; let index = index" class="ml-1">
+                        <div class="card border-primary mb-3" style="max-width: 18rem;">
+                            <div class="card-header">{{producto2.PRODUCTO}}</div>
+                            <div class="card-body text-primary">
+                                <h5 class="card-title">{{producto2.DESCRIPCION}}</h5>
+                                <p>Cantidad: {{producto2.CANTIDAD}} <small class="text-muted">+{{producto2.DATA1}}</small></p>
+                                <p>{{producto2.PRECIO | currency}} -> {{producto2.DATA2 | currency}}</p>
+                            </div>
+                        </div>
+                    </slide>
+                </carousel>
+            </div>
+            
+        </div>
+        <div class="row" *ngIf="productosConflict.length != 0">
+            <div class="form-group w-100">
+                <div class="row form-group">
+                    <h3 class="col">Productos con error o repetidos[Código o Nombre]</h3>
+                </div>
+                <carousel *ngIf="productosConflict.length > 0"  [showIndicators]="false"
+                            [itemsPerSlide]= "itemsPerSlide"
+                            [singleSlideOffset]="singleSlideOffset"
+                            [interval]="0"
+                            [startFromIndex]="0"
+                            >
+                    <slide *ngFor="let producto3 of productosConflict; let index = index" class="ml-1">
+                        <div class="card border-danger mb-3" style="max-width: 18rem;">
+                            <div class="card-header">{{producto3.PRODUCTO}}</div>
+                            <div class="card-body text-danger">
+                                <h5 class="card-title">{{producto3.DESCRIPCION}}</h5>
+                                <p>Cantidad: <small class="text-muted">{{producto3.CANTIDAD}}</small></p>
+                                <p>{{producto3.PRECIO | currency}}</p>
+                            </div>
+                        </div>
+                    </slide>
+                </carousel>
+            </div>
+        </div>
+    </div>
+</div>

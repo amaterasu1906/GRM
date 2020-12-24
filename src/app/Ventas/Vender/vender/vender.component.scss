@@ -41,3 +41,7 @@ margenes{
     background-color: rgb(190 229 235);
     border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
+
+.disabled {
+    pointer-events: none;
+}
