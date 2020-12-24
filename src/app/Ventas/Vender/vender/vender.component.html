@@ -171,6 +171,6 @@
             </ng-container>
         </div>
     </div>
-    <app-resumen *ngIf="seccionPago" class="col-10" [productos]="productos" [carProductos]="carProductos" [carServicios]="carServicios" [totalPagar]="totalPagar"></app-resumen>
+    <app-resumen *ngIf="seccionPago" class="col-10" [productos]="productos" [carProductos]="carProductos" [carServicios]="carServicios" [totalPagar]="totalPagar" (finalizado)="finalizo($event)"></app-resumen>
   </div>
 </div>

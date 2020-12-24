@@ -214,4 +214,10 @@ export class VenderComponent implements OnInit {
   seccionPagar(){
     this.seccionPago = !this.seccionPago;
   }
+
+  finalizo(evento: any){
+    console.log(evento.total);
+    this.totalPagar = evento.total;
+    this.seccionPago = evento.seccionPago;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Producto } from 'src/app/Models/producto';
@@ -31,6 +31,8 @@ export class ResumenComponent implements OnInit {
   @Input() carProductos : ProductoCar[] = new Array<ProductoCar>();
   @Input() carServicios : ServicioProducto[] = new Array<ServicioProducto>(); 
   @Input() totalPagar! : number ;
+
+  @Output() finalizado = new EventEmitter(); 
 
   dbItemsProductos : Producto[] = new Array<Producto>();
 
@@ -143,19 +145,22 @@ export class ResumenComponent implements OnInit {
       localStorage.removeItem("carrito");
       this.carProductos.length = 0;
       this.carServicios.length = 0;
+      this.finalizado.emit({total:0, seccionPago: false})
   }
   updateProductos(){
     this.carProductos.forEach((item, index) => {      
       let productoUp = item.PRODUCTO;
       productoUp.CANTIDAD = productoUp.CANTIDAD - item.CANTIDADITEMS;
       // Update Producto
-      this.db.doc('Productos/'+item.PRODUCTO.IDDB).update(productoUp).then((result) => { 
-        this.itemsUpdate=+1;
+      this.db.doc('Productos/'+item.PRODUCTO.IDDB).update(productoUp).then((result) => {
+        this.itemsUpdate=this.itemsUpdate+1;
+        if( this.itemsUpdate == this.carProductos.length ){ 
+          this.updateExitoso = true; 
+        }
         this.updateData.push({
           IDDB : item.PRODUCTO.IDDB,
           UPDATE: true
-        });        
-        if( this.itemsUpdate == this.carProductos.length ){ this.updateExitoso = true; }
+        });
         if((index+1) == this.carProductos.length){
           if(this.updateExitoso){
             // si fue exitosa la actualizacion de productos, continuamos con la insercion de datos
@@ -165,6 +170,8 @@ export class ResumenComponent implements OnInit {
           }
         } 
       }).catch(error =>{
+        console.log("error: " + error);
+        
         this.updateData.push({
           IDDB : item.PRODUCTO.IDDB,
           UPDATE: false});
