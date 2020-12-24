@@ -19,7 +19,7 @@ interface productosLista {
   styleUrls: ['./vender.component.scss']
 })
 export class VenderComponent implements OnInit {
-  seccionPago :  boolean = true;
+  seccionPago :  boolean = false;
 
   productos : Producto[] = new Array<Producto>();
   marcas : Categoria[] = new Array<Categoria>();
@@ -210,5 +210,11 @@ export class VenderComponent implements OnInit {
   }
   seccionPagar(){
     this.seccionPago = !this.seccionPago;
+  }
+
+  finalizo(evento: any){
+    console.log(evento.total);
+    this.totalPagar = evento.total;
+    this.seccionPago = evento.seccionPago;
   }
 }
