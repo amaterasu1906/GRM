@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './Commons/home/home.component';
+import { ExcelComponent } from './Productos/Data/excel/excel.component';
 import { AgregarProductoComponent } from './Productos/lista-productos/agregar-producto/agregar-producto.component';
 import { ListaComponent } from './Productos/lista-productos/lista/lista.component';
 import { MostrarProductosComponent } from './Productos/lista-productos/mostrar-productos/mostrar-productos.component';
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path:'productos', component: ListaComponent},
   {path: 'productos/agregar', component: AgregarProductoComponent },
   {path: 'productos/productos', component: MostrarProductosComponent },
-  {path: 'productos/productos/:producto', component: MostrarProductosComponent }  
+  {path: 'productos/productos/:producto', component: MostrarProductosComponent },
+  {path : 'read-excel', component : ExcelComponent}
 ];
 
 @NgModule({

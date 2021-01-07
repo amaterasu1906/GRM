@@ -55,7 +55,7 @@ export class ListaComponent implements OnInit {
 
   updateItemCantidad(posicion: number, evento : any){
     let cantidadUpdate = evento.srcElement.value;
-    if(cantidadUpdate > 1){
+    if(cantidadUpdate >= 1){
       this.productos[posicion].CANTIDAD = cantidadUpdate;
     }
   }
@@ -70,6 +70,9 @@ export class ListaComponent implements OnInit {
   agregarProducto(){
     this.ruta.navigateByUrl('/productos/agregar');
   }
+  cargarExcel(){
+    this.ruta.navigateByUrl('/read-excel');
+  }
 
   cambiarLocal(posicion: number, event : any){
     let localUpdate = event.srcElement.value;
@@ -79,6 +82,9 @@ export class ListaComponent implements OnInit {
   buscarPorNombre(evento: any){
     let nombre = evento.srcElement.value.toString().toLowerCase();
     this.productos.forEach((item) => {
+      if( item.MEDIDA == undefined){
+        item.MEDIDA = "";
+      }
       if(
         item.PRODUCTO.toLowerCase().includes(nombre) ||
         item.DESCRIPCION.toLowerCase().includes(nombre) ||

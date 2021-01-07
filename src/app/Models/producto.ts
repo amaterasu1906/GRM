@@ -17,6 +17,8 @@ export class Producto{
     PRODUCTO: string;
     PROVEEDOR: string;
     TIPOREPUESTO: string;
+    DATA1 : number;
+    DATA2 : number;
     UBICACION: number;
     FECHAACTUALIZACION : string;
     FECHAALTA : string;
@@ -38,6 +40,8 @@ export class Producto{
         this.PRODUCTO = "";
         this.PROVEEDOR = "";
         this.TIPOREPUESTO = "";
+        this.DATA1 = 0;
+        this.DATA2 = 0;
         this.UBICACION = -1;
         this.FECHAACTUALIZACION  = "";
         this.FECHAALTA  = "";
