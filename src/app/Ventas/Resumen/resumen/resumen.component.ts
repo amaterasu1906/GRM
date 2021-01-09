@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Producto } from 'src/app/Models/producto';
@@ -27,21 +27,24 @@ interface updateProduct{
 })
 export class ResumenComponent implements OnInit {
   usuario!: firebase.User;
+  @ViewChild('ticketPrint', { static: false }) public areaImpresion!: ElementRef;
   @Input() productos : Producto[] = new Array<Producto>();
   @Input() carProductos : ProductoCar[] = new Array<ProductoCar>();
   @Input() carServicios : ServicioProducto[] = new Array<ServicioProducto>(); 
   @Input() totalPagar! : number ;
-
   @Output() finalizado = new EventEmitter(); 
-
   dbItemsProductos : Producto[] = new Array<Producto>();
-
   updateData : Array<updateProduct> = [];
-
   itemsUpdate : number = 0;
   countItemsUpdate : number = 0;
   updateExitoso : boolean = false;
-  
+  fecha : Date = new Date();
+  vistaTicket : boolean = false;
+  idVenta : string = "";
+  cloneCarProductos : ProductoCar[] = new Array<ProductoCar>();
+  cloneCarServicios : ServicioProducto[] = new Array<ServicioProducto>(); 
+  cloneTotalPagar! : number ;
+
   constructor(private db: AngularFirestore, private getItems : GetItemsService, private modal : SweetalertService,
     public ofAuth: AngularFireAuth) { 
 
@@ -51,6 +54,31 @@ export class ResumenComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  imprimirTicket(){
+    let printContents = this.areaImpresion.nativeElement.innerHTML;
+    let popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    if( popupWin != null){
+      popupWin.document.open();
+      popupWin.document.write(`
+        <html>
+          <head>
+            <title>Ticket</title>
+            <style>
+            ${this.getStyle()}
+            </style>
+          </head>
+          <body onload="print()">${printContents}</body>
+          <script>
+            function print() {
+              window.print();
+            }
+          </script>
+        </html>`
+      );
+      popupWin.document.close();
+    }
   }
 
   pagar(){
@@ -75,11 +103,21 @@ export class ResumenComponent implements OnInit {
       subs$.unsubscribe();
     });
   }
-  
+  getIdVenta(): string{
+    let dateObj = new Date();
+    let month = (dateObj.getUTCMonth() + 1).toString().length < 2 ? "0"+(dateObj.getUTCMonth() + 1) : (dateObj.getUTCMonth() + 1);
+    let day = (dateObj.getUTCDate()).toString().length < 2 ? "0"+(dateObj.getUTCDate()) : dateObj.getUTCDate();
+    let year = dateObj.getUTCFullYear();
+    let hour = (dateObj.getHours()).toString().length < 2 ? "0"+(dateObj.getHours()) : dateObj.getHours();
+    let minutes = (dateObj.getUTCMinutes()).toString().length < 2 ? "0"+(dateObj.getUTCMinutes()) : dateObj.getUTCMinutes()
+    let seconds = (dateObj.getUTCSeconds()).toString().length < 2 ? "0"+(dateObj.getUTCSeconds()) : dateObj.getUTCSeconds()
+    return year+""+month+""+day+""+hour+""+minutes+""+seconds;
+  }
   addVenta(){
     // Idventa = 20201214+time
     let venta = new Venta();
-    venta.IDVENTA = '1234';
+    this.idVenta = this.getIdVenta();
+    venta.IDVENTA = this.idVenta;
     venta.USUARIO = this.usuario.email!;
     venta.SUBTOTAL = this.totalPagar - (this.totalPagar*venta.IVA);
     venta.TOTALVENTA = this.totalPagar;
@@ -96,6 +134,7 @@ export class ResumenComponent implements OnInit {
     venta.PRODUCTOSVENDIDOS = JSON.stringify(ventProd);
     this.db.collection('Ventas').add({...venta}).then((response) => {
       this.modal.modalSuccess("Venta","Se añadio correctamente la venta");
+      this.fecha = new Date();
       this.finishUpdateProductos();
     }).catch(error =>{
       this.modal.modalError("Venta","Error al vender");
@@ -141,11 +180,23 @@ export class ResumenComponent implements OnInit {
     console.log("Aun nada");
     
   }
+  clonar(a:any[], b:any[]): any[]{
+    a.forEach(item => b.push(item));
+    return b;
+  }
   finishUpdateProductos(){
+    this.cloneCarProductos = this.clonar(this.carProductos, this.cloneCarProductos);
+    this.cloneCarServicios = this.clonar(this.carServicios, this.cloneCarServicios);
+    this.cloneTotalPagar = this.totalPagar;
+
       localStorage.removeItem("carrito");
       this.carProductos.length = 0;
       this.carServicios.length = 0;
-      this.finalizado.emit({total:0, seccionPago: false})
+      this.finalizado.emit({total:0, seccionPago: true})
+      this.vistaTicket = true;
+    }
+  finalizar(){
+    this.finalizado.emit({total:0, seccionPago: false})
   }
   updateProductos(){
     this.carProductos.forEach((item, index) => {      
@@ -203,5 +254,53 @@ export class ResumenComponent implements OnInit {
     return (contador == this.carProductos.length);
   }
 
+  getStyle():string{
+    return `
+    td,
+    th,
+    tr,
+    table {
+        border-top: 1px solid black;
+        border-collapse: collapse;
+    }
+    
+    td.producto,
+    th.producto {
+        width: 85px;
+        max-width: 85px;
+    }
+    
+    td.cantidad,
+    th.cantidad {
+        width: 40px;
+        max-width: 40px;
+        word-break: break-all;
+    }
+    
+    td.precio,
+    th.precio {
+        width: 60px;
+        max-width: 60px;
+        word-break: break-all;
+    }
+    
+    .centrado {
+        text-align: center;
+        align-content: center;
+    }
+    
+    .ticket {
+        width: 185px;
+        max-width: 185px;
+        font-size: 12px;
+        font-family: 'Times New Roman';
+    }
+    
+    img {
+        max-width: inherit;
+        width: inherit;
+    }
+    `;
+  }
 
 }

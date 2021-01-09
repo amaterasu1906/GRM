@@ -213,6 +213,7 @@ export class VenderComponent implements OnInit {
   }
   seccionPagar(){
     this.seccionPago = !this.seccionPago;
+    this.totalCar();
   }
 
   finalizo(evento: any){
