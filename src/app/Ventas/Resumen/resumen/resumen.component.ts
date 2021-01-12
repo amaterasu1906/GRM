@@ -38,12 +38,11 @@ export class ResumenComponent implements OnInit {
   itemsUpdate : number = 0;
   countItemsUpdate : number = 0;
   updateExitoso : boolean = false;
-  fecha : Date = new Date();
+  fechaTicket : string = "";
   vistaTicket : boolean = false;
-  idVenta : string = "";
   cloneCarProductos : ProductoCar[] = new Array<ProductoCar>();
   cloneCarServicios : ServicioProducto[] = new Array<ServicioProducto>(); 
-  cloneTotalPagar! : number ;
+  ventaImpresion : Venta = new Venta();
 
   constructor(private db: AngularFirestore, private getItems : GetItemsService, private modal : SweetalertService,
     public ofAuth: AngularFireAuth) { 
@@ -57,24 +56,23 @@ export class ResumenComponent implements OnInit {
   }
 
   imprimirTicket(){
+    var width  = screen.width-400;
+    var height = screen.height - 200;
+    var left   = screen.width-Math.round(screen.width/2 + width/2);
+    var top    = 0;
+    var params = 'width='+width+', height='+height;
+    params += ', top='+top+', left='+left;
     let printContents = this.areaImpresion.nativeElement.innerHTML;
-    let popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    let popupWin = window.open('', '_blank', params);
     if( popupWin != null){
       popupWin.document.open();
       popupWin.document.write(`
         <html>
           <head>
             <title>Ticket</title>
-            <style>
-            ${this.getStyle()}
-            </style>
+            <link rel="stylesheet" href="/assets/css/styleTicket.css" >
           </head>
-          <body onload="print()">${printContents}</body>
-          <script>
-            function print() {
-              window.print();
-            }
-          </script>
+          <body>${printContents}</body>
         </html>`
       );
       popupWin.document.close();
@@ -114,14 +112,12 @@ export class ResumenComponent implements OnInit {
     return year+""+month+""+day+""+hour+""+minutes+""+seconds;
   }
   addVenta(){
-    // Idventa = 20201214+time
-    let venta = new Venta();
-    this.idVenta = this.getIdVenta();
-    venta.IDVENTA = this.idVenta;
-    venta.USUARIO = this.usuario.email!;
-    venta.SUBTOTAL = this.totalPagar - (this.totalPagar*venta.IVA);
-    venta.TOTALVENTA = this.totalPagar;
-    venta.FECHAALTA = new Date();
+    
+    this.ventaImpresion.IDVENTA = this.getIdVenta();
+    this.ventaImpresion.USUARIO = this.usuario.email!;
+    this.ventaImpresion.SUBTOTAL = this.totalPagar - (this.totalPagar*this.ventaImpresion.IVA);
+    this.ventaImpresion.TOTALVENTA = this.totalPagar;
+    this.ventaImpresion.FECHAALTA = new Date();
     let ventProd : Array<any> = new Array<any>();
     this.carProductos.forEach((item) => {
       let x = this.convertProductoToVentaProduct(item);
@@ -131,10 +127,10 @@ export class ResumenComponent implements OnInit {
       let x = this.convertServicioToVentaProduct(item);
       ventProd.push(x);
     });
-    venta.PRODUCTOSVENDIDOS = JSON.stringify(ventProd);
-    this.db.collection('Ventas').add({...venta}).then((response) => {
+    this.ventaImpresion.PRODUCTOSVENDIDOS = JSON.stringify(ventProd);
+    this.db.collection('Ventas').add({...this.ventaImpresion}).then((response) => {
       this.modal.modalSuccess("Venta","Se añadio correctamente la venta");
-      this.fecha = new Date();
+      this.fechaTicket = new Date().getTime().toString();
       this.finishUpdateProductos();
     }).catch(error =>{
       this.modal.modalError("Venta","Error al vender");
@@ -187,8 +183,7 @@ export class ResumenComponent implements OnInit {
   finishUpdateProductos(){
     this.cloneCarProductos = this.clonar(this.carProductos, this.cloneCarProductos);
     this.cloneCarServicios = this.clonar(this.carServicios, this.cloneCarServicios);
-    this.cloneTotalPagar = this.totalPagar;
-
+    this.ventaImpresion.TOTALVENTA = this.totalPagar;
       localStorage.removeItem("carrito");
       this.carProductos.length = 0;
       this.carServicios.length = 0;
@@ -252,55 +247,6 @@ export class ResumenComponent implements OnInit {
       });
     });    
     return (contador == this.carProductos.length);
-  }
-
-  getStyle():string{
-    return `
-    td,
-    th,
-    tr,
-    table {
-        border-top: 1px solid black;
-        border-collapse: collapse;
-    }
-    
-    td.producto,
-    th.producto {
-        width: 85px;
-        max-width: 85px;
-    }
-    
-    td.cantidad,
-    th.cantidad {
-        width: 40px;
-        max-width: 40px;
-        word-break: break-all;
-    }
-    
-    td.precio,
-    th.precio {
-        width: 60px;
-        max-width: 60px;
-        word-break: break-all;
-    }
-    
-    .centrado {
-        text-align: center;
-        align-content: center;
-    }
-    
-    .ticket {
-        width: 185px;
-        max-width: 185px;
-        font-size: 12px;
-        font-family: 'Times New Roman';
-    }
-    
-    img {
-        max-width: inherit;
-        width: inherit;
-    }
-    `;
   }
 
 }

@@ -30,6 +30,9 @@ import { ResumenComponent } from './Ventas/Resumen/resumen/resumen.component';
 import { ExcelComponent } from './Productos/Data/excel/excel.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ToastrModule } from 'ngx-toastr';
+import { ReportediarioComponent } from './Reportes/dia/reportediario/reportediario.component';
+import { TicketComponent } from './Ventas/ticket/ticket/ticket.component';
+import { TicketCierreComponent } from './Reportes/dia/ticket-cierre/ticket-cierre.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,10 @@ import { ToastrModule } from 'ngx-toastr';
     MostrarProductosComponent,
     HomeComponent,
     ResumenComponent,
-    ExcelComponent
+    ExcelComponent,
+    ReportediarioComponent,
+    TicketComponent,
+    TicketCierreComponent
   ],
   imports: [
     BrowserModule,

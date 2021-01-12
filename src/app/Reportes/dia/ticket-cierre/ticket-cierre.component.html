@@ -1,0 +1,44 @@
+<div class="ticket">
+    <img
+        src="/assets/Logo/logo.png"
+        alt="Logotipo">
+    <p class="centrado">GRM
+        <br>Tehuetlan
+        <br>{{fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
+        <br>Ticket del dia
+    </p>
+    <p>
+        #Ventas: {{venta.numeroVentas}}
+        <br>#Productos : {{carProductos.length}}
+        <br>#Articulos Vendidos: {{venta.totalProductosVendidos}}
+        <br>#Servicios : {{carServicios.length}}
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th class="cantidad">CANT</th>
+                <th class="producto">PRODUCTO</th>
+                <th class="precio">$$</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let producto of carProductos">
+              <td class="cantidad">{{producto.CANTIDADITEMS}}</td>
+              <td class="producto">{{producto.PRODUCTO.PRODUCTO}}</td>
+              <td class="precio">{{(producto.CANTIDADITEMS*producto.PRODUCTO.PRECIO) | currency}}</td>
+            </tr>
+            <tr *ngFor="let serv of carServicios; let pos = index">
+              <td class="cantidad">1</td>
+              <td class="producto">{{serv.NOMBRE}}</td>
+              <td class="precio">{{serv.PRECIO | currency}}</td>
+            </tr>
+            <tr>
+                <td class="cantidad"></td>
+                <td class="producto">TOTAL</td>
+                <td class="precio">{{venta.TOTALVENTA | currency}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="centrado">Cierre del dia
+        <br>Good Job!</p>
+  </div>

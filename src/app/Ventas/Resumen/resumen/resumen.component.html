@@ -71,49 +71,10 @@
           <a (click)="finalizar()" class="btn btn-outline-danger">Finalizar</a>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-4"></div>
-        <div #ticketPrint class="col-sm-4">
-          <div class="ticket">
-            <img
-                src="/assets/Logo/logo.png"
-                alt="Logotipo">
-            <p class="centrado">GRM
-                <br>Tehuetlan
-                <br>{{fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
-                <br>{{idVenta}}
-            </p>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="cantidad">CANT</th>
-                        <th class="producto">PRODUCTO</th>
-                        <th class="precio">$$</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let producto of cloneCarProductos">
-                      <td class="cantidad">{{producto.CANTIDADITEMS}}</td>
-                      <td class="producto">{{producto.PRODUCTO.PRODUCTO}}</td>
-                      <td class="precio">{{producto.PRODUCTO.PRECIO | currency}}</td>
-                    </tr>
-                    <tr *ngFor="let serv of cloneCarServicios; let pos = index">
-                      <td class="cantidad">1</td>
-                      <td class="producto">{{serv.NOMBRE}}</td>
-                      <td class="precio">{{serv.PRECIO | currency}}</td>
-                    </tr>
-                    <tr>
-                        <td class="cantidad"></td>
-                        <td class="producto">TOTAL</td>
-                        <td class="precio">{{cloneTotalPagar | currency}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p class="centrado">¡GRACIAS POR SU COMPRA!
-                <br>GRM.com</p>
-          </div>
+      <div class="mx-auto">
+        <div #ticketPrint >
+          <app-ticket [carProductos]="cloneCarProductos" [carServicios]="cloneCarServicios" [ventaImpresion]="ventaImpresion" [fecha]="fechaTicket"></app-ticket>
         </div>
-        <div class="col-sm-4"></div>
       </div>
     </div>
 </div>

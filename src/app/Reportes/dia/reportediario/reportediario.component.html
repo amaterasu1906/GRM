@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="">
+        <h2>Reportes del dia</h2>
+        <tabset [justified]="true">
+
+
+          <tab heading="Cierre del dia">
+            <h2>Cierre del dia</h2>
+            <app-ticket-cierre [carProductos]="listaCarProductos" 
+              [carServicios]="listaCarServicios" 
+              [venta]="venta" 
+              [fecha]="fechaTicket"
+              ></app-ticket-cierre>
+          </tab>
+
+            <tab heading="Reimpresion">
+                <h1>Tickets</h1>
+                <div class="table-responsive">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                          <tr class="table-info">
+                            <th scope="col">Reimprimir</th>
+                            <th scope="col">Id Ticket</th>
+                            <th scope="col">Usuario Alta</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Fecha</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngFor="let venta of ventas$ | async">
+                            <tr >
+                                <td><button class="btn btn-success" (click)="imprimirTicket(venta)">Reimprimir</button></td>
+                                <td>{{venta.IDVENTA}}</td>
+                                <td>{{venta.USUARIO}}</td>
+                                <td>{{venta.TOTALVENTA | currency}}</td>
+                                <td>{{convertirFecha(venta.FECHAALTA) | date: 'YYYY MM dd hh:mm:ss' }}</td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                </div>
+            </tab>
+            
+        </tabset>
+    </div>
+</div>
+
+<div #ticketPrint class="col-sm-4 d-none">
+    <app-ticket [carProductos]="carProductos" [carServicios]="carServicios" [ventaImpresion]="ventaImpresion" [fecha]="fechaTicket"></app-ticket>
+</div>

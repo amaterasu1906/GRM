@@ -1,0 +1,38 @@
+<div class="ticket mx-auto">
+    <img
+        src="/assets/Logo/logo.png"
+        alt="Logotipo">
+    <p class="centrado">GRM
+        <br>Tehuetlan
+        <br>{{fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
+        <br>{{ventaImpresion.IDVENTA}}
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th class="cantidad">CANT</th>
+                <th class="producto">PRODUCTO</th>
+                <th class="precio">$$</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let producto of carProductos">
+              <td class="cantidad">{{producto.CANTIDADITEMS}}</td>
+              <td class="producto">{{producto.PRODUCTO.PRODUCTO}}</td>
+              <td class="precio">{{producto.PRODUCTO.PRECIO | currency}}</td>
+            </tr>
+            <tr *ngFor="let serv of carServicios; let pos = index">
+              <td class="cantidad">1</td>
+              <td class="producto">{{serv.NOMBRE}}</td>
+              <td class="precio">{{serv.PRECIO | currency}}</td>
+            </tr>
+            <tr>
+                <td class="cantidad"></td>
+                <td class="producto">TOTAL</td>
+                <td class="precio">{{ventaImpresion.TOTALVENTA | currency}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="centrado">¡GRACIAS POR SU COMPRA!
+        <br>GRM.com</p>
+  </div>
