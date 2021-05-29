@@ -5,6 +5,7 @@ export class Producto{
     IDDB : string;
     ID : string;
     CANTIDAD : number;
+    CANTIDADVENDIDA: number;
     CATEGORIA : string;
     CODIGO : string;
     CODIGOBARRAS : string;
@@ -14,6 +15,7 @@ export class Producto{
     MARCA: string;
     MEDIDA: string;
     PRECIO: number;
+    DESCUENTO : number;
     PRODUCTO: string;
     PROVEEDOR: string;
     TIPOREPUESTO: string;
@@ -28,6 +30,7 @@ export class Producto{
         this.IDDB = "";
         this.ID  = "";
         this.CANTIDAD  = 0;
+        this.CANTIDADVENDIDA  = 0;
         this.CATEGORIA  = "";
         this.CODIGO  = "";
         this.CODIGOBARRAS  = "";
@@ -37,6 +40,7 @@ export class Producto{
         this.MARCA = "";
         this.MEDIDA = "";
         this.PRECIO = -1;
+        this.DESCUENTO = 0;
         this.PRODUCTO = "";
         this.PROVEEDOR = "";
         this.TIPOREPUESTO = "";

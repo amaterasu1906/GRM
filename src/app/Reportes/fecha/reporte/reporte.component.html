@@ -1,0 +1,57 @@
+<div class="container-fluid">
+  <h3>Reportes de ventas</h3>
+  <div class="row">
+      <form [formGroup]="myForm" class="col-12">
+          <div class="row form-group">
+            <div class="col-6 input-group">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Fecha</label>
+              </div>
+              <input type="text" class="form-control" placeholder="Rango de fechas" bsDaterangepicker
+                formControlName="range" [dateCustomClasses]="dateCustomClasses" [bsConfig]="bsConfig"
+                [maxDate]="maxDate" />
+            </div>
+            <div class="col-6">
+              <button class="btn btn-primary w-100" (click)="busqueda()"
+                [disabled]="!myForm.valid">Buscar</button>
+            </div>
+          </div>
+      </form>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h2>Fecha {{fechaTicket}}</h2>
+      <p># de tickets {{venta.numeroVentas}}: Total venta: {{venta.totalVenta}}</p>
+      <p># de Productos vendidos : {{venta.totalProductosVendidos}}</p>
+      <p># de Servicios : {{venta.totalServiciosVendidos}}</p>
+      <p>Total venta de productos : {{venta.totalProductos}}</p>
+      <p>Total venta de Servicios : {{venta.totalServicios}}</p>
+    </div>
+    <div class="col-12">
+      <p>Productos mas vendidos</p>
+      <p>Productos menos vendidos</p>
+    </div>
+    <div class="col-12 table-responsive">
+      <table class="table table-hover text-nowrap">
+        <thead>
+          <tr class="table-info">
+            <th scope="col">Id Ticket</th>
+            <th scope="col">Usuario Alta</th>
+            <th scope="col">Total</th>
+            <th scope="col">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let venta of ventas">
+            <tr>
+              <td>{{venta.IDVENTA}}</td>
+              <td>{{venta.USUARIO}}</td>
+              <td>{{venta.TOTALVENTA | currency}}</td>
+              <td>{{venta.FECHAALTA}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

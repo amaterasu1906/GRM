@@ -16,17 +16,25 @@ export class HomeComponent implements OnInit {
   marcas$! : Observable<Categoria[]>;
   endDate$! : BehaviorSubject<Date>;
   constructor(private getItemsDB: AngularFirestore) {
-    console.log("Inicio");
+    // console.log("Inicio");
     
-    this.endDate$ = new BehaviorSubject(new Date('2020-12-08'));
-    this.marcas$ = this.endDate$.pipe(
-      switchMap( date => this.getItemsDB.collection<Categoria>('CatMarca', ref =>
-        ref.where('FECHAALTA', '>=', date)
-      ).valueChanges())
-    );
+    // this.endDate$ = new BehaviorSubject(new Date('2020-12-08'));
+    // this.marcas$ = this.endDate$.pipe(
+    //   switchMap( date => this.getItemsDB.collection<Categoria>('CatMarca', ref =>
+    //     ref.where('FECHAALTA', '>=', date)
+    //   ).valueChanges())
+    // );
+    console.log(this.prueba(9));
     
     
   }
+  prueba(x: number): number
+{
+  let i = x - 1;
+  while ((i > 0) && (x%i != 0))
+      i = i - 1;
+  return i;
+}
   ngOnInit(): void {
     
     

@@ -1,6 +1,19 @@
 <div class="container">
-    <p *ngFor="let marca of marcas$ | async"> {{marca.NOMBRE}}</p>
+    <h1>Pruebas</h1>
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger" role="alert">col 12</div>
+        </div>
+    </div>
+  <div class="row">
+    <div class="col-6">
+      <div class="alert alert-success" role="alert">alert 1</div>
+    </div>
+    <div class="col-6">
+      <div class="alert alert-success" role="alert">alert 2</div>
+    </div>
+  </div>
+  <div class="row">
+    <p class="text-uppercase ">Texto a modificar</p>
+  </div>
 </div>
-
-<button (click)="nextFecha()" class="btn btn-primary">Next</button>
-<button (click)="previousFecha()" class="btn btn-primary">Previous</button>

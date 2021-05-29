@@ -33,6 +33,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { ReportediarioComponent } from './Reportes/dia/reportediario/reportediario.component';
 import { TicketComponent } from './Ventas/ticket/ticket/ticket.component';
 import { TicketCierreComponent } from './Reportes/dia/ticket-cierre/ticket-cierre.component';
+import { ReporteComponent } from './Reportes/fecha/reporte/reporte.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { TicketCierreComponent } from './Reportes/dia/ticket-cierre/ticket-cierr
     ExcelComponent,
     ReportediarioComponent,
     TicketComponent,
-    TicketCierreComponent
+    TicketCierreComponent,
+    ReporteComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,8 @@ import { TicketCierreComponent } from './Reportes/dia/ticket-cierre/ticket-cierr
     TabsModule.forRoot(),
     BootstrapIconsModule.pick(allIcons),
     CarouselModule.forRoot(),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    BsDatepickerModule.forRoot()
   ],
   providers: [
     AngularFireAuth,

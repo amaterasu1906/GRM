@@ -13,6 +13,39 @@
                         <input (input)="buscarPorNombre($event)" type="text" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="Buscar articulo">
                     </div>
                 </div>
+                <!-- aqui -->
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                  <ng-container *ngFor="let item of productos; let posicion = index">
+                    <div *ngIf="item.ESTATUS" class="col mb-4">
+                      <div class="card shadow" style="height: 430px;">
+                        <img *ngIf="item.IMGURL == ''" src="../../../../assets/images/sinimagen.jpg" class="card-img-top" alt="" style="height: 150px;">
+                        <img *ngIf="item.IMGURL != ''" [src]="item.IMGURL" class="card-img-top" alt="..." style="height: 150px;">
+                        <div class="card-body">
+                          <div class="d-flex justify-content-between">
+                            <h4 class="text-danger ">{{item.CODIGO}}</h4>
+                            <h5 class="card-title">{{item.PRODUCTO}}</h5>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <span class="text-muted ">Disponibles: {{item.CANTIDAD}}</span>
+                            <p> {{item.PRECIO | currency}}</p>
+                          </div>
+                          <p class="card-text" tooltip="{{item.DESCRIPCION}}">{{item.DESCRIPCION}}</p>
+                          <ng-container *ngFor="let local of locales">
+                            <p *ngIf="item.UBICACION == local.ID" class="col-sm-6">{{primeraLetraMayuscula(local.NOMBRE)}}</p>
+                          </ng-container>
+                          <p>{{primeraLetraMayuscula(item.MARCA)}}</p>
+                          <p>{{item.MEDIDA}}</p>
+                          <div [ngClass]="{disabled : item.CANTIDAD == 0}">
+                            <a (click)="anadirProductoALista(posicion)" [ngClass]="{disabled : item.CANTIDAD == 0}" class="btn btn-success btn-block btn-pagar2">
+                              <bi class="iconCar" name="cart-plus"></bi>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+                <!-- hasta aqui -->
                 <div class="table-responsive">
                     <table class="table table-hover text-nowrap">
                         <thead>
